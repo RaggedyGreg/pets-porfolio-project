@@ -1,0 +1,21 @@
+{
+  "noMatch.text": "Página no encontrada",
+  "noMatch.link": "Volver a Inicio",
+
+  "home.table.header.name": "Nombre",
+  "home.table.header.kind": "Tipo",
+  "home.table.header.weight": "Peso (g)",
+  "home.table.header.height": "Altura (cm)",
+  "home.table.header.length": "Longitud (cm)",
+  "home.table.header.photo": "Foto",
+
+  "detail.weight": "Peso (g)",
+  "detail.height": "Altura (cm)",
+  "detail.length": "Longitud (cm)",
+  "detail.description": "Descripción",
+  "detail.kind": "Tipo",
+  "detail.numberOfLives": "Número de vidas",
+  "detail.health": "Salud",
+
+  "petToday.text": "Mascota del día"
+}
