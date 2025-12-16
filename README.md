@@ -1,5 +1,12 @@
 # Pet Manager - React TypeScript Application
 
+[![CI/CD Pipeline](https://github.com/RaggedyGreg/pets-porfolio-project/actions/workflows/ci.yml/badge.svg)](https://github.com/RaggedyGreg/pets-porfolio-project/actions/workflows/ci.yml)
+[![Deploy to Vercel](https://github.com/RaggedyGreg/pets-porfolio-project/actions/workflows/deploy.yml/badge.svg)](https://github.com/RaggedyGreg/pets-porfolio-project/actions/workflows/deploy.yml)
+[![codecov](https://codecov.io/gh/RaggedyGreg/pets-porfolio-project/branch/main/graph/badge.svg)](https://codecov.io/gh/RaggedyGreg/pets-porfolio-project)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+🚀 **Live Demo:** [https://pet-app-portfolio-c5wm0soha-gregory-loginows-projects.vercel.app](https://pet-app-portfolio-c5wm0soha-gregory-loginows-projects.vercel.app)
+
 A modern, performant pet management application built with React and TypeScript, featuring advanced filtering, sorting, and health tracking capabilities.
 
 ## ✨ Key Features

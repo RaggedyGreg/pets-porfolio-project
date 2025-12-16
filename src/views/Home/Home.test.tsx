@@ -52,8 +52,8 @@ describe('Home component', () => {
     // Wait for pets to load and check they're displayed
     await waitFor(() => {
       expect(screen.getByText('Max')).toBeInTheDocument();
-      expect(screen.getByText('Luna')).toBeInTheDocument();
     });
+    expect(screen.getByText('Luna')).toBeInTheDocument();
    
   }); 
 });

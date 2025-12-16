@@ -8,6 +8,9 @@ import {
   ListItem,
   ListItemText,
   Typography,
+  Alert,
+  AlertTitle,
+  Button,
 } from "@mui/material";
 import { isCat, isBird } from "../../interfaces/interfaces";
 import { ArrowBack } from "@mui/icons-material";
@@ -15,7 +18,6 @@ import { useTranslation } from "react-i18next";
 import { useFetchDetail } from "../../hooks/useFetchDetail";
 import { notFound } from "../../icons/icons";
 import { chooseImage } from "../../utils/utils";
-import { NoMatch } from "../NoMatch";
 import { Health } from "../../components/Health/Health";
 import { endpoints } from "../../config/api";
 
@@ -31,7 +33,20 @@ const Detail = () => {
   return !data && loading ? (
     <CircularProgress />
   ) : error || !data ? (
-    <NoMatch />
+    <Box p={3}>
+      <Alert severity="error">
+        <AlertTitle>{t("detail.error.title", "Pet Not Found")}</AlertTitle>
+        {t(
+          "detail.error.message",
+          "We couldn't find the pet you're looking for. It may have been removed or the ID is incorrect."
+        )}
+        <Box sx={{ mt: 2 }}>
+          <Button variant="contained" onClick={() => navigate("/")}>
+            {t("detail.error.backHome", "Back to Home")}
+          </Button>
+        </Box>
+      </Alert>
+    </Box>
   ) : (
     <>
       <Box onClick={() => navigate(`/`)} sx={{ cursor: "pointer" }} p={1}>

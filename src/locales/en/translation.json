@@ -29,6 +29,26 @@
     "kind": "Kind",
     "health": "Health",
     "wingspan": "Wingspan",
-    "numOfFeathers": "Number of Feathers"
+    "numOfFeathers": "Number of Feathers",
+    "error": {
+      "title": "Pet Not Found",
+      "message": "We couldn't find the pet you're looking for. It may have been removed or the ID is incorrect.",
+      "backHome": "Back to Home"
+    }
+  },
+  "home": {
+    "error": {
+      "title": "Error Loading Pets",
+      "message": "Unable to load pets. Please check your connection and try again.",
+      "retry": "Retry"
+    }
+  },
+  "error": {
+    "boundary": {
+      "title": "Oops! Something went wrong",
+      "message": "We're sorry for the inconvenience. An unexpected error occurred. Please try again.",
+      "tryAgain": "Try Again",
+      "reload": "Reload Page"
+    }
   }
 }
