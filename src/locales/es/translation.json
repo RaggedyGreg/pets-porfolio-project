@@ -36,6 +36,15 @@
     }
   },
   "home": {
+    "search": {
+      "placeholder": "Buscar mascotas por nombre..."
+    },
+    "filter": {
+      "dog": "Perros",
+      "cat": "Gatos",
+      "bird": "Aves",
+      "clear": "Limpiar Todo"
+    },
     "error": {
       "title": "Error al Cargar Mascotas",
       "message": "No se pudieron cargar las mascotas. Por favor, verifica tu conexión e intenta nuevamente.",
@@ -49,5 +58,9 @@
       "tryAgain": "Intentar Nuevamente",
       "reload": "Recargar Página"
     }
+  },
+  "theme": {
+    "switchToLight": "Cambiar a modo claro",
+    "switchToDark": "Cambiar a modo oscuro"
   }
 }

@@ -22,7 +22,12 @@ import {
   AlertTitle,
   Button,
   Box,
+  TextField,
+  InputAdornment,
+  Chip,
 } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import FilterListIcon from "@mui/icons-material/FilterList";
 
 import variables from "../../scss/variables.module.scss";
 import { useNavigate } from "react-router-dom";
@@ -33,6 +38,8 @@ import { endpoints } from "../../config/api";
 
 const PAGINATION_MODEL_STORAGE = "paginationModel";
 const SORT_MODEL_STORAGE = "sortModel";
+const SEARCH_STORAGE = "searchQuery";
+const FILTER_STORAGE = "petTypeFilter";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -45,6 +52,8 @@ const Home = () => {
     sortField: "",
     sortOrder: "desc",
   });
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [petTypeFilter, setPetTypeFilter] = useState<string[]>([]);
   const { data, loading, error } = useFetch(
     endpoints.getPets(),
     paginationModel,
@@ -56,11 +65,20 @@ const Home = () => {
     const storedPaginationModel = sessionStorage.getItem(
       PAGINATION_MODEL_STORAGE
     );
+    const storedSearch = sessionStorage.getItem(SEARCH_STORAGE);
+    const storedFilter = sessionStorage.getItem(FILTER_STORAGE);
+    
     if (storedSortModel) {
       setSortModel(JSON.parse(storedSortModel));
     }
     if (storedPaginationModel) {
       setPaginationModel(JSON.parse(storedPaginationModel));
+    }
+    if (storedSearch) {
+      setSearchQuery(storedSearch);
+    }
+    if (storedFilter) {
+      setPetTypeFilter(JSON.parse(storedFilter));
     }
   }, []);
 
@@ -115,6 +133,32 @@ const Home = () => {
     </TableSortLabel>
   );
 
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+    sessionStorage.setItem(SEARCH_STORAGE, query);
+    setPaginationModel({ ...paginationModel, page: 0 });
+  };
+
+  const handleFilterToggle = (type: string) => {
+    const newFilters = petTypeFilter.includes(type)
+      ? petTypeFilter.filter((t) => t !== type)
+      : [...petTypeFilter, type];
+    
+    setPetTypeFilter(newFilters);
+    sessionStorage.setItem(FILTER_STORAGE, JSON.stringify(newFilters));
+    setPaginationModel({ ...paginationModel, page: 0 });
+  };
+
+  // Filter and search data
+  const filteredData = data?.rows.filter((pet) => {
+    const matchesSearch = pet.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesFilter = petTypeFilter.length === 0 || petTypeFilter.includes(pet.kind);
+    return matchesSearch && matchesFilter;
+  }) || [];
+
+  const filteredTotalCount = filteredData.length;
+
   return loading ? (
     <CircularProgress />
   ) : error ? (
@@ -138,6 +182,66 @@ const Home = () => {
   ) : (
     <Stack pt={2} spacing={2}>
       <PetOfTheDay maxPets={data?.totalCount || 0} />
+      
+      {/* Search and Filter Section */}
+      <Paper sx={{ p: 2 }}>
+        <Stack spacing={2}>
+          <TextField
+            fullWidth
+            placeholder={t("home.search.placeholder", "Search pets by name...")}
+            value={searchQuery}
+            onChange={handleSearchChange}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+          
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
+            <FilterListIcon sx={{ color: "text.secondary" }} />
+            <Chip
+              label={t("home.filter.dog", "Dogs")}
+              onClick={() => handleFilterToggle("dog")}
+              color={petTypeFilter.includes("dog") ? "primary" : "default"}
+              variant={petTypeFilter.includes("dog") ? "filled" : "outlined"}
+            />
+            <Chip
+              label={t("home.filter.cat", "Cats")}
+              onClick={() => handleFilterToggle("cat")}
+              color={petTypeFilter.includes("cat") ? "primary" : "default"}
+              variant={petTypeFilter.includes("cat") ? "filled" : "outlined"}
+            />
+            <Chip
+              label={t("home.filter.bird", "Birds")}
+              onClick={() => handleFilterToggle("bird")}
+              color={petTypeFilter.includes("bird") ? "primary" : "default"}
+              variant={petTypeFilter.includes("bird") ? "filled" : "outlined"}
+            />
+            {(searchQuery || petTypeFilter.length > 0) && (
+              <Chip
+                label={t("home.filter.clear", "Clear All")}
+                onClick={() => {
+                  setSearchQuery("");
+                  setPetTypeFilter([]);
+                  sessionStorage.removeItem(SEARCH_STORAGE);
+                  sessionStorage.removeItem(FILTER_STORAGE);
+                }}
+                variant="outlined"
+                onDelete={() => {
+                  setSearchQuery("");
+                  setPetTypeFilter([]);
+                  sessionStorage.removeItem(SEARCH_STORAGE);
+                  sessionStorage.removeItem(FILTER_STORAGE);
+                }}
+              />
+            )}
+          </Box>
+        </Stack>
+      </Paper>
+      
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -170,7 +274,7 @@ const Home = () => {
                 </TableCell>
               </TableRow>
             ) : (
-              data?.rows.map((row) => (
+              filteredData.map((row) => (
                 <TableRow
                   onClick={() => handleClickRow(row.id)}
                   key={row.name}
@@ -212,7 +316,7 @@ const Home = () => {
       <TablePagination
         component="div"
         rowsPerPageOptions={[5, 10, 15, 25]}
-        count={data?.totalCount || 0}
+        count={filteredTotalCount}
         page={paginationModel.page}
         rowsPerPage={paginationModel.pageSize}
         onPageChange={handleChangePage}

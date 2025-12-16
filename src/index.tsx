@@ -7,6 +7,7 @@ import i18n from "i18next";
 import LanguageDetector from 'i18next-browser-languagedetector';
 import translationEN from './locales/en/translation.json';
 import translationES from './locales/es/translation.json';
+import { CustomThemeProvider } from './contexts/ThemeContext';
 
 import { BrowserRouter } from "react-router-dom";
 
@@ -42,7 +43,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <BrowserRouter>
     <I18nextProvider i18n={i18n}>
-      <App />
+      <CustomThemeProvider>
+        <App />
+      </CustomThemeProvider>
     </I18nextProvider>
   </BrowserRouter>
 );
