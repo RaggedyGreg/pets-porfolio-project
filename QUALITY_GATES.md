@@ -77,6 +77,12 @@ Defined in `package.json` under `jest.coverageThreshold`:
 }
 ```
 
+**Note**: Current thresholds are set at **50%** to match the existing coverage level (50.28%). The target is to gradually increase this to **80%** as test coverage improves. Key areas needing coverage:
+- `src/hooks` - Currently at 1.19%
+- `src/contexts` - Currently at 0%
+- `src/views/Home/Home.tsx` - Currently at 63.75%
+- `src/views/Detail/Detail.tsx` - Currently at 54.54%
+
 ## Troubleshooting
 
 ### Hook not running
