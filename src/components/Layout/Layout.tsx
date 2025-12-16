@@ -7,7 +7,7 @@ export const Layout = () => (
     <AppBar position="static" sx={{ backgroundColor: variables.primaryColor  }}>
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Fever Pets
+          Pet Manager
         </Typography>
       </Toolbar>
     </AppBar>

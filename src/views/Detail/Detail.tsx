@@ -9,6 +9,7 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
+import { isCat, isBird } from "../../interfaces/interfaces";
 import { ArrowBack } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { useFetchDetail } from "../../hooks/useFetchDetail";
@@ -16,14 +17,15 @@ import { notFound } from "../../icons/icons";
 import { chooseImage } from "../../utils/utils";
 import { NoMatch } from "../NoMatch";
 import { Health } from "../../components/Health/Health";
+import { endpoints } from "../../config/api";
 
-export const Detail = () => {
+const Detail = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
 
   const { data, loading, error } = useFetchDetail(
-    `https://my-json-server.typicode.com/Feverup/fever_pets_data/pets/${id}`
+    endpoints.getPetDetail(id || '')
   );
 
   return !data && loading ? (
@@ -40,7 +42,6 @@ export const Detail = () => {
       <Grid container p={3} spacing={2}>
         <Grid item md={6} textAlign="center">
           <img
-          role="bigImage"
             data-testid="bigImage"
             alt="Pet"
             height={200}
@@ -65,13 +66,29 @@ export const Detail = () => {
             <ListItem>
               <ListItemText primary={t("detail.length")} secondary={data?.length} />
             </ListItem>
-            {data?.number_of_lives && (
+            {isCat(data) && (
               <ListItem>
                 <ListItemText
                   primary={t("detail.numberOfLives")}
-                  secondary={data?.number_of_lives}
+                  secondary={data.number_of_lives}
                 />
               </ListItem>
+            )}
+            {isBird(data) && (
+              <>
+                <ListItem>
+                  <ListItemText
+                    primary={t("detail.wingspan")}
+                    secondary={`${data.wingspan} cm`}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary={t("detail.numOfFeathers")}
+                    secondary={data.num_of_feathers}
+                  />
+                </ListItem>
+              </>
             )}
             <ListItem>
               <ListItemText
@@ -80,11 +97,16 @@ export const Detail = () => {
               />
             </ListItem>
             <ListItem>
-              <ListItemText primary={t("detail.kind")} secondary={<img data-testid="kindImage" alt="Pet" height={30} src={chooseImage(data?.kind)} />} />
+              <ListItemText
+                primary={t("detail.kind")}
+                secondary={<img data-testid="kindImage"
+                alt="Pet" height={30}
+                src={chooseImage(data?.kind)}
+              />} />
             </ListItem>
             <ListItem>
               <ListItemText 
-                role="health"
+                data-testid="health"
                 primary={t("detail.health")}
                 secondary={<Health pet={data}/>}
               />
@@ -95,3 +117,5 @@ export const Detail = () => {
     </>
   );
 };
+
+export default Detail;

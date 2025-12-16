@@ -1,4 +1,4 @@
-import { catIcon, dogIcon, undefinedIcon } from "../icons/icons";
+import { catIcon, dogIcon, birdIcon, undefinedIcon } from "../icons/icons";
 
 
 
@@ -8,6 +8,8 @@ export const chooseImage = (kind: string) => {
       return dogIcon;
     case "cat":
       return catIcon;
+    case "bird":
+      return birdIcon;
     default:
       return undefinedIcon;
   }

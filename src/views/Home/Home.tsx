@@ -25,11 +25,12 @@ import { useNavigate } from "react-router-dom";
 import { chooseImage } from "../../utils/utils";
 import { useTranslation } from "react-i18next";
 import { PetOfTheDay } from "./PetOfTheDay";
+import { endpoints } from "../../config/api";
 
 const PAGINATION_MODEL_STORAGE = "paginationModel";
 const SORT_MODEL_STORAGE = "sortModel";
 
-export const Home = () => {
+const Home = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [paginationModel, setPaginationModel] = useState<PetPaginationModel>({
@@ -40,8 +41,8 @@ export const Home = () => {
     sortField: "",
     sortOrder: "desc",
   });
-  const { data, loading, error } = useFetch(
-    "https://my-json-server.typicode.com/Feverup/fever_pets_data/pets",
+  const { data, loading } = useFetch(
+    endpoints.getPets(),
     paginationModel,
     sortModel
   );
@@ -198,3 +199,5 @@ export const Home = () => {
     </Stack>
   );
 };
+
+export default Home;

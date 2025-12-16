@@ -1,30 +1,42 @@
-import { FC } from "react";
-import { Pet } from "../../interfaces/interfaces";
+import { FC, memo } from "react";
+import { Pet, HealthStatus } from "../../interfaces/interfaces";
 import variables from "../../scss/variables.module.scss";
-import { Box, Typography } from "@mui/material";
+import { HealthStrategyFactory } from "../../strategies/health/HealthStrategyFactory";
 
 interface HealthProps {
   pet: Pet;
 }
 
-export const Health: FC<HealthProps> = ({ pet }) => {
-  let health = pet.weight / (pet.height * pet.length);
-  let healthText = "";
-  let healthColor = "";
+export const Health: FC<HealthProps> = memo(({ pet }) => {
+  const healthStatus: HealthStatus = HealthStrategyFactory.calculateHealth(pet);
+  
+  const getHealthColor = (status: HealthStatus): string => {
+    switch (status) {
+      case 'unhealthy':
+        return variables.healthUnhealthy;
+      case 'very healthy':
+        return variables.healthVeryHealthy;
+      case 'healthy':
+        return variables.healthHealthy;
+      default:
+        return variables.healthHealthy;
+    }
+  };
 
-  if (
-    (pet.kind === "cat" && pet.number_of_lives === 1) ||
-    health < 2 ||
-    health > 5
-  ) {
-    healthText = "unhealthy";
-    healthColor = variables.healthUnhealthy;
-  } else if (health >= 2 && health <= 3) {
-    healthText = "very healthy";
-    healthColor = variables.healthVeryHealthy;
-  } else if (health >= 3 || health <= 5) {
-    healthText = "healthy";
-    healthColor = variables.healthHealthy;
-  }
-  return <span style={{ color: healthColor }}>{healthText}</span>;
-};
+  return (
+    <span style={{ color: getHealthColor(healthStatus) }}>
+      {healthStatus}
+    </span>
+  );
+}, (prevProps, nextProps) => {
+  // Only re-render if pet ID or relevant properties change
+  return (
+    prevProps.pet.id === nextProps.pet.id &&
+    prevProps.pet.kind === nextProps.pet.kind &&
+    prevProps.pet.weight === nextProps.pet.weight &&
+    prevProps.pet.height === nextProps.pet.height &&
+    prevProps.pet.length === nextProps.pet.length
+  );
+});
+
+Health.displayName = 'Health';

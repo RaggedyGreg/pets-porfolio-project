@@ -1,4 +1,4 @@
-export interface Pet {
+export interface BasePet {
   id: number;
   name: string;
   kind: string;
@@ -7,8 +7,38 @@ export interface Pet {
   length: number;
   photo_url: string;
   description: string;
-  number_of_lives?: number;
 }
+
+export interface DogPet extends BasePet {
+  kind: "dog";
+}
+
+export interface CatPet extends BasePet {
+  kind: "cat";
+  number_of_lives: number;
+}
+
+export interface BirdPet extends BasePet {
+  kind: "bird";
+  num_of_feathers: number;
+  wingspan: number;
+}
+
+export type Pet = DogPet | CatPet | BirdPet;
+
+export function isDog(pet: Pet): pet is DogPet {
+  return pet.kind === "dog";
+}
+
+export function isCat(pet: Pet): pet is CatPet {
+  return pet.kind === "cat";
+}
+
+export function isBird(pet: Pet): pet is BirdPet {
+  return pet.kind === "bird";
+}
+
+export type HealthStatus = "unhealthy" | "healthy" | "very healthy";
 
 export type ApiResponse = { rows: Pet[]; totalCount: number };
 

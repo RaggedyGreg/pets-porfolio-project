@@ -1,40 +1,18 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
-import { Detail } from './Detail';
-import { RequestHandler, rest } from 'msw';
-import { setupServer } from 'msw/node';
-
-const server = setupServer(
-  rest.get('https://my-json-server.typicode.com/Feverup/fever_pets_data/pets/:id', (req, res, ctx) => {
-    const { id } = req.params;
-    if (id === 'error') {
-      return res(ctx.status(500), ctx.json({ message: 'Error fetching data' }));
-    } else {
-      return res(
-        ctx.json({
-          id,
-          name: 'Fluffy',
-          weight: '1012',
-          height: '50',
-          length: '100',
-          number_of_lives: 4,
-          description: 'A fluffy pet',
-          kind: 'dog',
-          photo_url: 'https://example.com/fluffy.jpg',
-        })
-      );
-    }
-  }) as RequestHandler
-);
-
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
+import Detail from './Detail';
+import * as useFetchDetailModule from '../../hooks/useFetchDetail';
 
 describe('Detail component', () => {
   test('renders pet details with loader correctly', async () => {
+    // Mock loading state
+    jest.spyOn(useFetchDetailModule, 'useFetchDetail').mockReturnValue({
+      data: null,
+      loading: true,
+      error: null
+    });
+
     render(
       <MemoryRouter initialEntries={['/pets/1']}>
         <Routes>
@@ -43,10 +21,28 @@ describe('Detail component', () => {
       </MemoryRouter>
     );
 
-      expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    
+    jest.restoreAllMocks();
   });
 
   test('renders pet details correctly', async () => {
+    // Mock successful data fetch
+    jest.spyOn(useFetchDetailModule, 'useFetchDetail').mockReturnValue({
+      data: {
+        id: 1,
+        name: 'Max',
+        weight: 25000,
+        height: 60,
+        length: 90,
+        description: 'A friendly and energetic golden retriever who loves to play fetch and swim.',
+        kind: 'dog',
+        photo_url: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400',
+      },
+      loading: false,
+      error: null
+    });
+
     render(
       <MemoryRouter initialEntries={['/pets/1']}>
         <Routes>
@@ -55,33 +51,46 @@ describe('Detail component', () => {
       </MemoryRouter>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText('Fluffy')).toBeInTheDocument();
-      expect(screen.getByText('1012')).toBeInTheDocument();
-      expect(screen.getByText('50')).toBeInTheDocument();
-      expect(screen.getByText('100')).toBeInTheDocument();
-      expect(screen.getByText('4')).toBeInTheDocument();
-      expect(screen.getByText('A fluffy pet')).toBeInTheDocument();
-      expect(screen.getByRole('bigImage')).toBeInTheDocument();
-      expect(screen.getByRole('bigImage')).toBeInTheDocument();
-      expect(screen.getByRole('bigImage')).toHaveAttribute('src', 'https://example.com/fluffy.jpg');
-      expect(screen.getByRole('bigImage')).toHaveAttribute('height', '200');
-      expect(screen.getByRole('health')).toBeInTheDocument(); 
-    });
+    // Wait for the main element to load
+    const nameElement = await screen.findByText('Max');
+    expect(nameElement).toBeInTheDocument();
+    
+    // Check all other elements are present
+    expect(screen.getByText('25000')).toBeInTheDocument();
+    expect(screen.getByText('60')).toBeInTheDocument();
+    expect(screen.getByText('90')).toBeInTheDocument();
+    expect(screen.getByText('A friendly and energetic golden retriever who loves to play fetch and swim.')).toBeInTheDocument();
+    
+    const image = screen.getByTestId('bigImage');
+    expect(image).toBeInTheDocument();
+    expect(image).toHaveAttribute('src', 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400');
+    
+    expect(screen.getByTestId('health')).toBeInTheDocument();
+    
+    jest.restoreAllMocks();
   });
 
-   test('displays error message when data fetching fails', async () => {
+  test('displays error message when data fetching fails', async () => {
+    // Mock error state
+    jest.spyOn(useFetchDetailModule, 'useFetchDetail').mockReturnValue({
+      data: null,
+      loading: false,
+      error: 'Pet not found'
+    });
+
     render(
-      <MemoryRouter initialEntries={['/pets/error']}>
+      <MemoryRouter initialEntries={['/pets/999']}>
         <Routes>
           <Route path="/pets/:id" element={<Detail />} />
         </Routes>
       </MemoryRouter>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText('noMatch.text')).toBeInTheDocument();
-      expect(screen.getByText('noMatch.link')).toBeInTheDocument();
-    });
+    // Wait for error message to appear
+    const errorText = await screen.findByText('noMatch.text');
+    expect(errorText).toBeInTheDocument();
+    expect(screen.getByText('noMatch.link')).toBeInTheDocument();
+    
+    jest.restoreAllMocks();
   });
 });

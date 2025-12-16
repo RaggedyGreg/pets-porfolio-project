@@ -18,5 +18,17 @@
   "detail.numberOfLives": "Number Of Lives",
   "detail.health": "Health",
 
-  "petToday.text": "Pet Today"
+  "petToday.text": "Pet Today",
+  
+  "detail": {
+    "weight": "Weight",
+    "height": "Height",
+    "length": "Length",
+    "numberOfLives": "Number of Lives",
+    "description": "Description",
+    "kind": "Kind",
+    "health": "Health",
+    "wingspan": "Wingspan",
+    "numOfFeathers": "Number of Feathers"
+  }
 }

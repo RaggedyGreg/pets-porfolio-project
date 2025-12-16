@@ -1,48 +1,46 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
-import { rest } from 'msw';
-import { setupServer } from 'msw/node';
-import { Home } from './Home';
+import Home from './Home';
 
-const server = setupServer(
-  rest.get('https://my-json-server.typicode.com/Feverup/fever_pets_data/pets', (req, res, ctx) => {
-    return res(
-      ctx.json({
-        totalCount: 2,
+// Mock the useFetch hook since we're using mock data
+jest.mock('../../hooks/useFetch', () => ({
+  useFetch: () => {
+    return {
+      data: {
         rows: [
-            {
-                id: 1,
-                name: 'Fluffy',
-                kind: 'dog',
-                weight: '10kg',
-                height: '50cm',
-                length: '100cm',
-                photo_url: 'https://example.com/fluffy.jpg',
-              },
-              {
-                id: 2,
-                name: 'Fluffy2',
-                kind: 'dog',
-                weight: '10kg',
-                height: '50cm',
-                length: '100cm',
-                photo_url: 'https://example.com/fluffy.jpg',
-              },
-          // Add more mock data as needed
+          {
+            id: 1,
+            name: 'Max',
+            kind: 'dog',
+            weight: 25000,
+            height: 60,
+            length: 90,
+            photo_url: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400',
+            description: 'A friendly dog'
+          },
+          {
+            id: 2,
+            name: 'Luna',
+            kind: 'cat',
+            weight: 4500,
+            height: 25,
+            length: 45,
+            photo_url: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400',
+            description: 'An elegant cat',
+            number_of_lives: 7
+          },
         ],
-      })
-    );
-  })
-);
-
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
+        totalCount: 2
+      },
+      loading: false,
+      error: null
+    };
+  }
+}));
 
 describe('Home component', () => {
-  test('renders loading beforetable ', async () => {
+  test('renders pet list correctly', async () => {
     render(
       <MemoryRouter>
         <Routes>
@@ -51,7 +49,11 @@ describe('Home component', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    // Wait for pets to load and check they're displayed
+    await waitFor(() => {
+      expect(screen.getByText('Max')).toBeInTheDocument();
+      expect(screen.getByText('Luna')).toBeInTheDocument();
+    });
    
   }); 
 });

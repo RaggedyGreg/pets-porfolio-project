@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { Button } from "@mui/material";
 import { getCookie, setCookie } from "../../utils/utils";
 import { useNavigate } from "react-router";

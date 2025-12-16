@@ -17,5 +17,17 @@
   "detail.numberOfLives": "Número de vidas",
   "detail.health": "Salud",
 
-  "petToday.text": "Mascota del día"
+  "petToday.text": "Mascota del día",
+  
+  "detail": {
+    "weight": "Peso",
+    "height": "Altura",
+    "length": "Longitud",
+    "numberOfLives": "Número de Vidas",
+    "description": "Descripción",
+    "kind": "Tipo",
+    "health": "Salud",
+    "wingspan": "Envergadura",
+    "numOfFeathers": "Número de Plumas"
+  }
 }
