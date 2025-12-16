@@ -30,6 +30,9 @@
     "health": "Health",
     "wingspan": "Wingspan",
     "numOfFeathers": "Number of Feathers",
+    "backToHome": "Go back to home page",
+    "mainContent": "Pet details",
+    "imageAlt": "Photo of {{name}}",
     "error": {
       "title": "Pet Not Found",
       "message": "We couldn't find the pet you're looking for. It may have been removed or the ID is incorrect.",
@@ -38,13 +41,24 @@
   },
   "home": {
     "search": {
-      "placeholder": "Search pets by name..."
+      "placeholder": "Search pets by name...",
+      "ariaLabel": "Search pets by name"
     },
     "filter": {
       "dog": "Dogs",
       "cat": "Cats",
       "bird": "Birds",
-      "clear": "Clear All"
+      "clear": "Clear All",
+      "ariaLabel": "Filter pets by type",
+      "dogAria": "Filter by dogs",
+      "catAria": "Filter by cats",
+      "birdAria": "Filter by birds",
+      "clearAria": "Clear all filters and search"
+    },
+    "table": {
+      "ariaLabel": "Pet list table",
+      "rowAria": "View details for {{name}}",
+      "kindIcon": "{{kind}} icon"
     },
     "error": {
       "title": "Error Loading Pets",
@@ -63,5 +77,8 @@
   "theme": {
     "switchToLight": "Switch to light mode",
     "switchToDark": "Switch to dark mode"
+  },
+  "layout": {
+    "skipToContent": "Skip to main content"
   }
 }

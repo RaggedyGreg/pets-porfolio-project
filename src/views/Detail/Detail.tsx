@@ -49,16 +49,24 @@ const Detail = () => {
     </Box>
   ) : (
     <>
-      <Box onClick={() => navigate(`/`)} sx={{ cursor: "pointer" }} p={1}>
+      <Box 
+        onClick={() => navigate(`/`)} 
+        sx={{ cursor: "pointer" }} 
+        p={1}
+        role="button"
+        tabIndex={0}
+        onKeyPress={(e) => e.key === 'Enter' && navigate('/')}
+        aria-label={t("detail.backToHome", "Go back to home page")}
+      >
         <Avatar>
           <ArrowBack />
         </Avatar>
       </Box>
-      <Grid container p={3} spacing={2}>
+      <Grid container p={3} spacing={2} component="main" aria-label={t("detail.mainContent", "Pet details")}>
         <Grid item md={6} textAlign="center">
           <img
             data-testid="bigImage"
-            alt="Pet"
+            alt={t("detail.imageAlt", "Photo of {{name}}", { name: data?.name })}
             height={200}
             src={data?.photo_url}
             onError={({ currentTarget }) => {
@@ -68,10 +76,10 @@ const Detail = () => {
           />
         </Grid>
         <Grid item md={6}>
-          <Typography variant="h4" component="div">
+          <Typography variant="h4" component="h1" id="pet-name">
             {data?.name}
           </Typography>
-          <List sx={{ flexFlow: "column wrap" }}>
+          <List sx={{ flexFlow: "column wrap" }} aria-labelledby="pet-name">
             <ListItem>
               <ListItemText primary={t("detail.weight")} secondary={data?.weight} />
             </ListItem>

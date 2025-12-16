@@ -191,34 +191,48 @@ const Home = () => {
             placeholder={t("home.search.placeholder", "Search pets by name...")}
             value={searchQuery}
             onChange={handleSearchChange}
+            inputProps={{
+              'aria-label': t("home.search.ariaLabel", "Search pets by name"),
+              'role': 'searchbox'
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon />
+                  <SearchIcon aria-hidden="true" />
                 </InputAdornment>
               ),
             }}
           />
           
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
-            <FilterListIcon sx={{ color: "text.secondary" }} />
+          <Box 
+            sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}
+            role="group"
+            aria-label={t("home.filter.ariaLabel", "Filter pets by type")}
+          >
+            <FilterListIcon sx={{ color: "text.secondary" }} aria-hidden="true" />
             <Chip
               label={t("home.filter.dog", "Dogs")}
               onClick={() => handleFilterToggle("dog")}
               color={petTypeFilter.includes("dog") ? "primary" : "default"}
               variant={petTypeFilter.includes("dog") ? "filled" : "outlined"}
+              aria-pressed={petTypeFilter.includes("dog")}
+              aria-label={t("home.filter.dogAria", "Filter by dogs")}
             />
             <Chip
               label={t("home.filter.cat", "Cats")}
               onClick={() => handleFilterToggle("cat")}
               color={petTypeFilter.includes("cat") ? "primary" : "default"}
               variant={petTypeFilter.includes("cat") ? "filled" : "outlined"}
+              aria-pressed={petTypeFilter.includes("cat")}
+              aria-label={t("home.filter.catAria", "Filter by cats")}
             />
             <Chip
               label={t("home.filter.bird", "Birds")}
               onClick={() => handleFilterToggle("bird")}
               color={petTypeFilter.includes("bird") ? "primary" : "default"}
               variant={petTypeFilter.includes("bird") ? "filled" : "outlined"}
+              aria-pressed={petTypeFilter.includes("bird")}
+              aria-label={t("home.filter.birdAria", "Filter by birds")}
             />
             {(searchQuery || petTypeFilter.length > 0) && (
               <Chip
@@ -236,6 +250,7 @@ const Home = () => {
                   sessionStorage.removeItem(SEARCH_STORAGE);
                   sessionStorage.removeItem(FILTER_STORAGE);
                 }}
+                aria-label={t("home.filter.clearAria", "Clear all filters and search")}
               />
             )}
           </Box>
@@ -243,7 +258,7 @@ const Home = () => {
       </Paper>
       
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={{ minWidth: 650 }} aria-label={t("home.table.ariaLabel", "Pet list table")}>
           <TableHead>
             <TableRow>
               <TableCell>
@@ -277,12 +292,21 @@ const Home = () => {
               filteredData.map((row) => (
                 <TableRow
                   onClick={() => handleClickRow(row.id)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleClickRow(row.id)}
                   key={row.name}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={t("home.table.rowAria", "View details for {{name}}", { name: row.name })}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
                     cursor: "pointer",
                     "&:hover": {
                       backgroundColor: variables.hoverColor,
+                    },
+                    "&:focus": {
+                      backgroundColor: variables.hoverColor,
+                      outline: "2px solid",
+                      outlineColor: "primary.main",
                     },
                   }}
                 >
@@ -290,7 +314,12 @@ const Home = () => {
                     {row.name}
                   </TableCell>
                   <TableCell>
-                    <img alt="Pet" height={30} src={chooseImage(row.kind)} />
+                    <img 
+                      alt={t("home.table.kindIcon", "{{kind}} icon", { kind: row.kind })} 
+                      height={30} 
+                      src={chooseImage(row.kind)} 
+                      aria-label={row.kind}
+                    />
                   </TableCell>
                   <TableCell>{row.weight}</TableCell>
                   <TableCell>{row.height}</TableCell>

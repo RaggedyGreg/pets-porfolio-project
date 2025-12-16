@@ -29,6 +29,9 @@
     "health": "Salud",
     "wingspan": "Envergadura",
     "numOfFeathers": "Número de Plumas",
+    "backToHome": "Volver a la página de inicio",
+    "mainContent": "Detalles de la mascota",
+    "imageAlt": "Foto de {{name}}",
     "error": {
       "title": "Mascota No Encontrada",
       "message": "No pudimos encontrar la mascota que buscas. Puede que haya sido eliminada o el ID es incorrecto.",
@@ -37,13 +40,24 @@
   },
   "home": {
     "search": {
-      "placeholder": "Buscar mascotas por nombre..."
+      "placeholder": "Buscar mascotas por nombre...",
+      "ariaLabel": "Buscar mascotas por nombre"
     },
     "filter": {
       "dog": "Perros",
       "cat": "Gatos",
       "bird": "Aves",
-      "clear": "Limpiar Todo"
+      "clear": "Limpiar Todo",
+      "ariaLabel": "Filtrar mascotas por tipo",
+      "dogAria": "Filtrar por perros",
+      "catAria": "Filtrar por gatos",
+      "birdAria": "Filtrar por aves",
+      "clearAria": "Limpiar todos los filtros y búsqueda"
+    },
+    "table": {
+      "ariaLabel": "Tabla de lista de mascotas",
+      "rowAria": "Ver detalles de {{name}}",
+      "kindIcon": "Icono de {{kind}}"
     },
     "error": {
       "title": "Error al Cargar Mascotas",
@@ -62,5 +76,8 @@
   "theme": {
     "switchToLight": "Cambiar a modo claro",
     "switchToDark": "Cambiar a modo oscuro"
+  },
+  "layout": {
+    "skipToContent": "Saltar al contenido principal"
   }
 }
