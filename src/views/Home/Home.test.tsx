@@ -132,10 +132,9 @@ describe('Home component', () => {
     });
 
     // Find the first table row (Max) and verify it's keyboard accessible
-    const maxRow = screen.getByText('Max').closest('tr');
+    const maxRow = screen.getByRole('button', { name: /Max.*dog/i });
     expect(maxRow).toBeInTheDocument();
     expect(maxRow).toHaveAttribute('tabIndex', '0');
-    expect(maxRow).toHaveAttribute('role', 'button');
   });
 
   test('has proper ARIA labels for accessibility', async () => {

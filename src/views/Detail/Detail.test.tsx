@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import Detail from './Detail';
 import * as useFetchDetailModule from '../../hooks/useFetchDetail';
@@ -146,7 +146,7 @@ describe('Detail component', () => {
       error: null
     });
 
-    const { container } = render(
+    render(
       <MemoryRouter initialEntries={['/pets/1']}>
         <Routes>
           <Route path="/pets/:id" element={<Detail />} />
@@ -158,7 +158,7 @@ describe('Detail component', () => {
     await screen.findByText('Max');
 
     // Check for semantic main element
-    const main = container.querySelector('main');
+    const main = screen.getByRole('main');
     expect(main).toBeInTheDocument();
 
     // Check for h1 heading

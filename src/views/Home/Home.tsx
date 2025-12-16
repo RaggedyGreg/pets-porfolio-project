@@ -1,4 +1,3 @@
-import { notFound } from "../../icons/icons";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useFetch } from "../../hooks/useFetch";
 import {
@@ -29,9 +28,7 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import FilterListIcon from "@mui/icons-material/FilterList";
 
-import variables from "../../scss/variables.module.scss";
 import { useNavigate } from "react-router-dom";
-import { chooseImage } from "../../utils/utils";
 import { useTranslation } from "react-i18next";
 import { PetOfTheDay } from "./PetOfTheDay";
 import { endpoints } from "../../config/api";
