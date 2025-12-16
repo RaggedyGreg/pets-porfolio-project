@@ -37,6 +37,15 @@
     }
   },
   "home": {
+    "search": {
+      "placeholder": "Search pets by name..."
+    },
+    "filter": {
+      "dog": "Dogs",
+      "cat": "Cats",
+      "bird": "Birds",
+      "clear": "Clear All"
+    },
     "error": {
       "title": "Error Loading Pets",
       "message": "Unable to load pets. Please check your connection and try again.",
@@ -50,5 +59,9 @@
       "tryAgain": "Try Again",
       "reload": "Reload Page"
     }
+  },
+  "theme": {
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode"
   }
 }
