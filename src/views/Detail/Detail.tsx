@@ -18,7 +18,6 @@ import { useTranslation } from "react-i18next";
 import { useFetchDetail } from "../../hooks/useFetchDetail";
 import { notFound } from "../../icons/icons";
 import { chooseImage } from "../../utils/utils";
-import { NoMatch } from "../NoMatch";
 import { Health } from "../../components/Health/Health";
 import { endpoints } from "../../config/api";
 
