@@ -1,5 +1,5 @@
 import { notFound } from "../../icons/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useFetch } from "../../hooks/useFetch";
 import {
   PetPaginationModel,
@@ -35,6 +35,7 @@ import { chooseImage } from "../../utils/utils";
 import { useTranslation } from "react-i18next";
 import { PetOfTheDay } from "./PetOfTheDay";
 import { endpoints } from "../../config/api";
+import { PetTableRow } from "../../components/PetTableRow/PetTableRow";
 
 const PAGINATION_MODEL_STORAGE = "paginationModel";
 const SORT_MODEL_STORAGE = "sortModel";
@@ -103,27 +104,26 @@ const Home = () => {
     );
   };
 
-  const handleClickRow = (id: number) => {
+  const handleClickRow = useCallback((id: number) => {
     navigate(`detail/${id}`);
-  };
+  }, [navigate]);
 
-  const handleSort = (field: string) => {
-    if (sortModel.sortField !== field) {
-      sortModel.sortOrder = "desc";
-    }
-    const order: SortOptions = sortModel.sortOrder === "asc" ? "desc" : "asc";
+  const handleSort = useCallback((field: string) => {
+    setSortModel((prevSortModel) => {
+      const isSameField = prevSortModel.sortField === field;
+      const order: SortOptions = isSameField && prevSortModel.sortOrder === "asc" ? "desc" : "asc";
 
-    const newSortOrder = {
-      sortField: field,
-      sortOrder: order,
-    };
+      const newSortOrder = {
+        sortField: field,
+        sortOrder: order,
+      };
 
-    setSortModel(newSortOrder);
-    sessionStorage.setItem(SORT_MODEL_STORAGE, JSON.stringify(newSortOrder));
-  };
+      sessionStorage.setItem(SORT_MODEL_STORAGE, JSON.stringify(newSortOrder));
+      return newSortOrder;
+    });
+  }, []);
 
-  const createSortLabel = (field: string, label: string) => (
-    // const direction = sortModel.sortField === field ? sortModel.sortOrder : "asc";
+  const createSortLabel = useCallback((field: string, label: string) => (
     <TableSortLabel
       active={sortModel.sortField === field}
       direction={sortModel.sortField === field ? sortModel.sortOrder : "asc"}
@@ -131,7 +131,7 @@ const Home = () => {
     >
       {label}
     </TableSortLabel>
-  );
+  ), [sortModel.sortField, sortModel.sortOrder, handleSort]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
@@ -140,22 +140,28 @@ const Home = () => {
     setPaginationModel({ ...paginationModel, page: 0 });
   };
 
-  const handleFilterToggle = (type: string) => {
-    const newFilters = petTypeFilter.includes(type)
-      ? petTypeFilter.filter((t) => t !== type)
-      : [...petTypeFilter, type];
-    
-    setPetTypeFilter(newFilters);
-    sessionStorage.setItem(FILTER_STORAGE, JSON.stringify(newFilters));
-    setPaginationModel({ ...paginationModel, page: 0 });
-  };
+  const handleFilterToggle = useCallback((type: string) => {
+    setPetTypeFilter((prevFilters) => {
+      const newFilters = prevFilters.includes(type)
+        ? prevFilters.filter((t) => t !== type)
+        : [...prevFilters, type];
+      
+      sessionStorage.setItem(FILTER_STORAGE, JSON.stringify(newFilters));
+      return newFilters;
+    });
+    setPaginationModel((prev) => ({ ...prev, page: 0 }));
+  }, []);
 
-  // Filter and search data
-  const filteredData = data?.rows.filter((pet) => {
-    const matchesSearch = pet.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesFilter = petTypeFilter.length === 0 || petTypeFilter.includes(pet.kind);
-    return matchesSearch && matchesFilter;
-  }) || [];
+  // Filter and search data - memoized for performance
+  const filteredData = useMemo(() => {
+    if (!data?.rows) return [];
+    
+    return data.rows.filter((pet) => {
+      const matchesSearch = pet.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesFilter = petTypeFilter.length === 0 || petTypeFilter.includes(pet.kind);
+      return matchesSearch && matchesFilter;
+    });
+  }, [data?.rows, searchQuery, petTypeFilter]);
 
   const filteredTotalCount = filteredData.length;
 
@@ -264,78 +270,37 @@ const Home = () => {
               <TableCell>
                 {createSortLabel("name", t("home.table.header.name"))}
               </TableCell>
-              <TableCell>
+              <TableCell align="right">
                 {createSortLabel("kind", t("home.table.header.kind"))}
               </TableCell>
-              <TableCell>
+              <TableCell align="right">
                 {createSortLabel("weight", t("home.table.header.weight"))}
               </TableCell>
-              <TableCell>
+              <TableCell align="right">
                 {createSortLabel("height", t("home.table.header.height"))}
               </TableCell>
-              <TableCell>
+              <TableCell align="right">
                 {createSortLabel("length", t("home.table.header.length"))}
               </TableCell>
-              <TableCell>
-                {createSortLabel("photo", t("home.table.header.photo"))}
+              <TableCell align="right">
+                {t("home.table.header.health", "Health")}
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={2} align="center">
+                <TableCell colSpan={6} align="center">
                   <CircularProgress />
                 </TableCell>
               </TableRow>
             ) : (
-              filteredData.map((row) => (
-                <TableRow
-                  onClick={() => handleClickRow(row.id)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleClickRow(row.id)}
-                  key={row.name}
-                  tabIndex={0}
-                  role="button"
-                  aria-label={t("home.table.rowAria", "View details for {{name}}", { name: row.name })}
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                    cursor: "pointer",
-                    "&:hover": {
-                      backgroundColor: variables.hoverColor,
-                    },
-                    "&:focus": {
-                      backgroundColor: variables.hoverColor,
-                      outline: "2px solid",
-                      outlineColor: "primary.main",
-                    },
-                  }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell>
-                    <img 
-                      alt={t("home.table.kindIcon", "{{kind}} icon", { kind: row.kind })} 
-                      height={30} 
-                      src={chooseImage(row.kind)} 
-                      aria-label={row.kind}
-                    />
-                  </TableCell>
-                  <TableCell>{row.weight}</TableCell>
-                  <TableCell>{row.height}</TableCell>
-                  <TableCell>{row.length}</TableCell>
-                  <TableCell>
-                    <img
-                      alt="Pet"
-                      height={60}
-                      src={row.photo_url}
-                      onError={({ currentTarget }) => {
-                        currentTarget.onerror = null; // prevents looping
-                        currentTarget.src = notFound;
-                      }}
-                    />
-                  </TableCell>
-                </TableRow>
+              filteredData.map((pet) => (
+                <PetTableRow
+                  key={pet.id}
+                  pet={pet}
+                  onRowClick={handleClickRow}
+                />
               ))
             )}
           </TableBody>

@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { IconButton, Tooltip } from '@mui/material';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { useTranslation } from 'react-i18next';
 
-export const ThemeToggle: React.FC = () => {
+export const ThemeToggle: React.FC = memo(() => {
   const { mode, toggleColorMode } = useThemeContext();
   const { t } = useTranslation();
 
@@ -21,4 +21,6 @@ export const ThemeToggle: React.FC = () => {
       </IconButton>
     </Tooltip>
   );
-};
+});
+
+ThemeToggle.displayName = 'ThemeToggle';
