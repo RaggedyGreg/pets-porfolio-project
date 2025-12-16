@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import Detail from './Detail';
 import * as useFetchDetailModule from '../../hooks/useFetchDetail';
@@ -93,4 +93,79 @@ describe('Detail component', () => {
     
     jest.restoreAllMocks();
   });
+
+  test('back button has proper accessibility attributes', async () => {
+    jest.spyOn(useFetchDetailModule, 'useFetchDetail').mockReturnValue({
+      data: {
+        id: 1,
+        name: 'Max',
+        weight: 25000,
+        height: 60,
+        length: 90,
+        description: 'A friendly dog',
+        kind: 'dog',
+        photo_url: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400',
+      },
+      loading: false,
+      error: null
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/pets/1']}>
+        <Routes>
+          <Route path="/pets/:id" element={<Detail />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    // Wait for component to load
+    await screen.findByText('Max');
+
+    // Find back button and verify accessibility
+    const backButton = screen.getByRole('button', { name: /go back to home page/i });
+    expect(backButton).toBeInTheDocument();
+    expect(backButton).toHaveAttribute('tabIndex', '0');
+    expect(backButton).toHaveAttribute('role', 'button');
+    
+    jest.restoreAllMocks();
+  });
+
+  test('has proper semantic HTML structure', async () => {
+    jest.spyOn(useFetchDetailModule, 'useFetchDetail').mockReturnValue({
+      data: {
+        id: 1,
+        name: 'Max',
+        weight: 25000,
+        height: 60,
+        length: 90,
+        description: 'A friendly dog',
+        kind: 'dog',
+        photo_url: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400',
+      },
+      loading: false,
+      error: null
+    });
+
+    const { container } = render(
+      <MemoryRouter initialEntries={['/pets/1']}>
+        <Routes>
+          <Route path="/pets/:id" element={<Detail />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    // Wait for component to load
+    await screen.findByText('Max');
+
+    // Check for semantic main element
+    const main = container.querySelector('main');
+    expect(main).toBeInTheDocument();
+
+    // Check for h1 heading
+    const heading = screen.getByRole('heading', { level: 1, name: 'Max' });
+    expect(heading).toBeInTheDocument();
+    
+    jest.restoreAllMocks();
+  });
 });
+
