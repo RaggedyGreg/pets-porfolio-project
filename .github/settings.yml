@@ -1,0 +1,45 @@
+# Repository settings for branch protection
+repository:
+  # General settings
+  has_issues: true
+  has_projects: true
+  has_wiki: false
+  has_downloads: true
+  default_branch: main
+  allow_squash_merge: true
+  allow_merge_commit: true
+  allow_rebase_merge: true
+  delete_branch_on_merge: false
+
+# Branch protection rules
+branches:
+  - name: main
+    protection:
+      required_pull_request_reviews:
+        required_approving_review_count: 0
+        dismiss_stale_reviews: false
+        require_code_owner_reviews: false
+      required_status_checks:
+        strict: false
+        contexts:
+          - "Test & Build (18.x)"
+          - "Test & Build (20.x)"
+          - "Code Quality"
+          - "Bundle Size Check"
+      enforce_admins: false
+      required_linear_history: false
+      restrictions: null
+      allow_force_pushes: true
+      allow_deletions: false
+
+  - name: development
+    protection:
+      required_pull_request_reviews: null
+      required_status_checks:
+        strict: false
+        contexts: []
+      enforce_admins: false
+      required_linear_history: false
+      restrictions: null
+      allow_force_pushes: true
+      allow_deletions: false
