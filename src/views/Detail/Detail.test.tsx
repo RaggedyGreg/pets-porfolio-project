@@ -75,7 +75,7 @@ describe('Detail component', () => {
     jest.spyOn(useFetchDetailModule, 'useFetchDetail').mockReturnValue({
       data: null,
       loading: false,
-      error: 'Pet not found'
+      error: new Error('Pet not found')
     });
 
     render(
@@ -86,10 +86,10 @@ describe('Detail component', () => {
       </MemoryRouter>
     );
 
-    // Wait for error message to appear
-    const errorText = await screen.findByText('noMatch.text');
-    expect(errorText).toBeInTheDocument();
-    expect(screen.getByText('noMatch.link')).toBeInTheDocument();
+    // Wait for error alert to appear
+    expect(await screen.findByRole('alert')).toBeInTheDocument();
+    expect(screen.getByText(/pet not found/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /back to home/i })).toBeInTheDocument();
     
     jest.restoreAllMocks();
   });

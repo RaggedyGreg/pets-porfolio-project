@@ -18,6 +18,10 @@ import {
   CircularProgress,
   TableSortLabel,
   Stack,
+  Alert,
+  AlertTitle,
+  Button,
+  Box,
 } from "@mui/material";
 
 import variables from "../../scss/variables.module.scss";
@@ -41,7 +45,7 @@ const Home = () => {
     sortField: "",
     sortOrder: "desc",
   });
-  const { data, loading } = useFetch(
+  const { data, loading, error } = useFetch(
     endpoints.getPets(),
     paginationModel,
     sortModel
@@ -113,6 +117,24 @@ const Home = () => {
 
   return loading ? (
     <CircularProgress />
+  ) : error ? (
+    <Box sx={{ p: 3 }}>
+      <Alert severity="error">
+        <AlertTitle>{t("home.error.title", "Error Loading Pets")}</AlertTitle>
+        {t(
+          "home.error.message",
+          "Unable to load pets. Please check your connection and try again."
+        )}
+        <Box sx={{ mt: 2 }}>
+          <Button
+            variant="contained"
+            onClick={() => window.location.reload()}
+          >
+            {t("home.error.retry", "Retry")}
+          </Button>
+        </Box>
+      </Alert>
+    </Box>
   ) : (
     <Stack pt={2} spacing={2}>
       <PetOfTheDay maxPets={data?.totalCount || 0} />

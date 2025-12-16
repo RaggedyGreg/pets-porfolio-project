@@ -28,6 +28,26 @@
     "kind": "Tipo",
     "health": "Salud",
     "wingspan": "Envergadura",
-    "numOfFeathers": "Número de Plumas"
+    "numOfFeathers": "Número de Plumas",
+    "error": {
+      "title": "Mascota No Encontrada",
+      "message": "No pudimos encontrar la mascota que buscas. Puede que haya sido eliminada o el ID es incorrecto.",
+      "backHome": "Volver al Inicio"
+    }
+  },
+  "home": {
+    "error": {
+      "title": "Error al Cargar Mascotas",
+      "message": "No se pudieron cargar las mascotas. Por favor, verifica tu conexión e intenta nuevamente.",
+      "retry": "Reintentar"
+    }
+  },
+  "error": {
+    "boundary": {
+      "title": "¡Ups! Algo salió mal",
+      "message": "Lamentamos las molestias. Ocurrió un error inesperado. Por favor, intenta nuevamente.",
+      "tryAgain": "Intentar Nuevamente",
+      "reload": "Recargar Página"
+    }
   }
 }
