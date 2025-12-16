@@ -1,0 +1,19 @@
+echo "🔍 Running pre-commit checks..."
+
+# Run linting
+echo "📝 Checking for lint errors..."
+npm run lint
+if [ $? -ne 0 ]; then
+  echo "❌ Lint check failed. Please fix the errors before committing."
+  exit 1
+fi
+
+# Run tests with coverage (Jest will check coverage thresholds)
+echo "🧪 Running tests with coverage..."
+npm test
+if [ $? -ne 0 ]; then
+  echo "❌ Tests or coverage check failed. Please fix before committing."
+  exit 1
+fi
+
+echo "✅ All pre-commit checks passed!"
