@@ -1,0 +1,77 @@
+// Primary Colors - Inspired by askperi.ai
+$primaryColor: #1a7f5a; // Deep green
+$primaryColorDark: #145241;
+$primaryColorLight: #e8f5f1;
+$accentColor: #2d9a71; // Bright green accent
+$hoverColor: #f0f9f6; // Soft green hover
+
+// Background & Surface Colors
+$backgroundColor: #ffffff;
+$surfaceColor: #fafbfc;
+$borderColor: #e5e9ec;
+
+// Text Colors
+$textPrimary: #1f2937;
+$textSecondary: #6b7280;
+$textMuted: #9ca3af;
+
+// Health Status Colors
+$health_unhealthy: #dc2626; // Modern red
+$health_healthy: #f59e0b; // Warm amber
+$health_very_healthy: #10b981; // Bright green
+
+// Spacing
+$spacing-xs: 0.5rem;
+$spacing-sm: 1rem;
+$spacing-md: 1.5rem;
+$spacing-lg: 2rem;
+$spacing-xl: 3rem;
+
+// Border Radius
+$radius-sm: 0.5rem;
+$radius-md: 0.75rem;
+$radius-lg: 1rem;
+
+// Shadows
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+:export {
+    // Colors
+    primaryColor: $primaryColor;
+    primaryColorDark: $primaryColorDark;
+    primaryColorLight: $primaryColorLight;
+    accentColor: $accentColor;
+    hoverColor: $hoverColor;
+    backgroundColor: $backgroundColor;
+    surfaceColor: $surfaceColor;
+    borderColor: $borderColor;
+    
+    // Text
+    textPrimary: $textPrimary;
+    textSecondary: $textSecondary;
+    textMuted: $textMuted;
+    
+    // Health
+    healthUnhealthy: $health_unhealthy;
+    healthHealthy: $health_healthy;
+    healthVeryHealthy: $health_very_healthy;
+    
+    // Spacing
+    spacingXs: $spacing-xs;
+    spacingSm: $spacing-sm;
+    spacingMd: $spacing-md;
+    spacingLg: $spacing-lg;
+    spacingXl: $spacing-xl;
+    
+    // Border Radius
+    radiusSm: $radius-sm;
+    radiusMd: $radius-md;
+    radiusLg: $radius-lg;
+    
+    // Shadows
+    shadowSm: $shadow-sm;
+    shadowMd: $shadow-md;
+    shadowLg: $shadow-lg;
+}
