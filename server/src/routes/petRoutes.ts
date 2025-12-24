@@ -6,7 +6,7 @@ import {
   updatePet,
   deletePet,
 } from '../controllers/petController';
-import { protect, restrictTo } from '../middleware/auth';
+import { protect } from '../middleware/auth';
 
 const router = Router();
 

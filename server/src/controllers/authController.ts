@@ -4,9 +4,10 @@ import { User } from '../models/User';
 import { AppError } from '../middleware/errorHandler';
 
 const generateToken = (id: string, email: string, role: string): string => {
-  return jwt.sign({ id, email, role }, process.env.JWT_SECRET!, {
+  const secret = process.env.JWT_SECRET as string;
+  return jwt.sign({ id, email, role }, secret, {
     expiresIn: process.env.JWT_EXPIRES_IN || '7d',
-  });
+  } as any);
 };
 
 export const register = async (req: Request, res: Response): Promise<void> => {
