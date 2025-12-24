@@ -1,14 +1,14 @@
-# Pet Manager
+# Pet Manager - Full Stack Application
 
 [![CI/CD Pipeline](https://github.com/RaggedyGreg/pets-porfolio-project/actions/workflows/ci.yml/badge.svg)](https://github.com/RaggedyGreg/pets-porfolio-project/actions/workflows/ci.yml)
 [![Deploy to Vercel](https://github.com/RaggedyGreg/pets-porfolio-project/actions/workflows/deploy.yml/badge.svg)](https://github.com/RaggedyGreg/pets-porfolio-project/actions/workflows/deploy.yml)
 [![codecov](https://codecov.io/gh/RaggedyGreg/pets-porfolio-project/branch/main/graph/badge.svg)](https://codecov.io/gh/RaggedyGreg/pets-porfolio-project)
 
-> A modern pet management SPA showcasing React best practices, TypeScript patterns, and performance optimization.
+> A modern full-stack pet management application with React frontend and Node.js + MongoDB backend, showcasing professional software engineering practices.
 
 ### 🚀 [View Live Demo](https://pet-app-portfolio-c5wm0soha-gregory-loginows-projects.vercel.app)
 
-> 📖 **Want to dive deeper?** Check out [PORTFOLIO.md](PORTFOLIO.md) for an in-depth technical breakdown, architectural decisions, and learning outcomes.
+> 📖 **Want to dive deeper?** Check out [PORTFOLIO.md](PORTFOLIO.md) for an in-depth technical breakdown and [ABOVE-AND-BEYOND.md](ABOVE-AND-BEYOND.md) for the enhancement roadmap.
 
 ## 📊 Key Metrics
 
