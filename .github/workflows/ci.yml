@@ -25,14 +25,20 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install root dependencies
         run: npm ci
+
+      - name: Install client dependencies
+        run: cd client && npm ci
+
+      - name: Install server dependencies
+        run: cd server && npm ci
 
       - name: Run linter
         run: npm run lint
 
       - name: Run tests
-        run: npm test -- --coverage --watchAll=false
+        run: npm test
 
       - name: Build project
         run: npm run build
@@ -42,7 +48,7 @@ jobs:
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage/lcov.info
+          files: ./client/coverage/lcov.info
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: false
@@ -52,7 +58,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build
-          path: build/
+          path: client/build/
           retention-days: 7
 
   lint-check:
@@ -69,11 +75,20 @@ jobs:
           node-version: '20.x'
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install root dependencies
         run: npm ci
 
-      - name: Check TypeScript
-        run: npx tsc --noEmit
+      - name: Install client dependencies
+        run: cd client && npm ci
+
+      - name: Install server dependencies
+        run: cd server && npm ci
+
+      - name: Check TypeScript - Client
+        run: cd client && npx tsc --noEmit
+
+      - name: Check TypeScript - Server
+        run: cd server && npx tsc --noEmit
 
       - name: Run ESLint
         run: npm run lint
@@ -92,20 +107,23 @@ jobs:
           node-version: '20.x'
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install root dependencies
         run: npm ci
 
+      - name: Install client dependencies
+        run: cd client && npm ci
+
       - name: Build project
-        run: npm run build
+        run: npm run build:client
 
       - name: Analyze bundle size
         run: |
           echo "## Bundle Size Analysis" >> $GITHUB_STEP_SUMMARY
-          echo "Main bundle: $(du -h build/static/js/main.*.js | cut -f1)" >> $GITHUB_STEP_SUMMARY
-          echo "Total size: $(du -sh build/ | cut -f1)" >> $GITHUB_STEP_SUMMARY
+          echo "Main bundle: $(du -h client/build/static/js/main.*.js | cut -f1)" >> $GITHUB_STEP_SUMMARY
+          echo "Total size: $(du -sh client/build/ | cut -f1)" >> $GITHUB_STEP_SUMMARY
           
           # Check if main bundle is under 180KB (original target)
-          MAIN_SIZE=$(stat -f%z build/static/js/main.*.js 2>/dev/null || stat -c%s build/static/js/main.*.js)
+          MAIN_SIZE=$(stat -f%z client/build/static/js/main.*.js 2>/dev/null || stat -c%s client/build/static/js/main.*.js)
           TARGET_SIZE=184320  # 180KB in bytes
           
           if [ $MAIN_SIZE -lt $TARGET_SIZE ]; then
