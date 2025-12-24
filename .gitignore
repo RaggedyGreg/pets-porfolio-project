@@ -23,3 +23,11 @@ yarn-debug.log*
 yarn-error.log*
 node_modules
 .vercel
+
+# Server
+server/node_modules/
+server/dist/
+server/.env
+
+# Root
+node_modules/
